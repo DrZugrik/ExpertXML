@@ -1,0 +1,73 @@
+<!-- redact_form.html -->
+{% extends 'upload.html' %}
+{% load static %}
+
+{% block redact %}
+ 
+    <!-- intro 2 -->
+    <div id="home" class="intro">
+        <div class="card">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs">
+                    <li class="nav-item"><a class="nav-link active" href="#">First Item</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Second Item</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Third Item</a></li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input id="formatted-display" class="form-check-input" type="radio" name="display-type" value="formatted">
+                                <label class="form-check-label" for="formatted-display">Форматированное отображение</label>
+                            </div>
+                            <div class="form-check">
+                                <input id="field-display" class="form-check-input" type="radio" name="display-type" value="fields">
+                                <label class="form-check-label" for="field-display">Отображение в виде полей</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6"></div>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col-md-6" id="fields_doc">
+                                    {{ name }}
+                                </div>
+                                <div class="col-md-6" id="pdf_doc">
+                                    <p>Загруженные файлы:</p>
+                                    <ul id="uploadedFilesList">
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p>
+                <button class="btn btn-primary" type="button">Сохранить данные</button>
+                <button class="btn btn-primary" type="button" disabled>Заполнить автоматически</button>
+                <button class="btn btn-primary" type="button">Скачать результат</button>
+                
+            </div>
+        </div>
+  
+    </div>
+    <!-- end intro 2 -->
+
+    <script>
+        // Функция для обновления списка загруженных файлов при выборе файлов
+        function updateUploadedFilesList(input) {
+            var fileList = document.getElementById('uploadedFilesList');
+            fileList.innerHTML = ''; // Очищаем список файлов перед обновлением
+
+            for (var i = 0; i < input.files.length; i++) {
+                var listItem = document.createElement('li');
+                listItem.textContent = input.files[i].name;
+                fileList.appendChild(listItem);
+            }
+
+            // Обновляем скрытое поле с именами загруженных файлов
+            document.getElementById('uploadedFiles').value = JSON.stringify(Array.from(input.files).map(file => file.name));
+        }
+    </script>
+
+{% endblock %}

@@ -1,0 +1,231 @@
+<!-- index.html -->
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+    <!-- intro -->
+    <div id="home" class="intro">
+        
+        <div class="container">
+            <div class="content">
+                <div class="row align-items-center">
+                    <div class="col-md">
+                        <div class="content-text">
+                            <span>Конвертация файлов</span>
+                            <h1>Сделайте свою работу продуктивней</h1>
+                            <div class="entry">
+                                <p>Сконвертируйте файлы в XML</p>
+                                <a href="{% url 'upload' %}" class="button">Начать</a>
+                            </div>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="content-image">
+                            <img src="{% static 'bootstrap/img/intro.png' %}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end intro -->
+
+    <!-- Как это работает -->
+    <div id="about" class="about">
+        <div class="container">
+            <h2>Мы предлагаем потрясающие условия для конвертации</h2>
+            <div class="row g-5">
+                <div class="col-md-7">
+                    <div class="content-left">
+                        <img src="{% static 'bootstrap/img/about.png' %}" alt="">
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="content-right">
+                        <img src="{% static 'bootstrap/img/about2.png' %}" alt="">
+                        <p>Не нашли нужную схему или модель? Просто свяжитесь с нами</p>
+                        <button class="button">Обратная связь</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end about -->
+
+    <!-- Возможности -->
+    <div id="gallery" class="gallery">
+        <div class="container">
+            <h2>Доступные схемы</h2>
+            <div class="divider"></div>
+            <div class="row g-5">
+                <div class="col-md-4">
+                    <a href="{% static 'bootstrap/img/gallery1.png' %}" class="popup-image"><img src="{% static 'bootstrap/img/gallery1.png' %}"></a>
+                </div>
+                <div class="col-md-4">
+                    <a href="{% static 'bootstrap/img/gallery2.png' %}" class="popup-image"><img src="{% static 'bootstrap/img/gallery2.png' %}"></a>
+                </div>
+                <div class="col-md-4">
+                    <a href="{% static 'bootstrap/img/gallery3.png' %}" class="popup-image"><img src="{% static 'bootstrap/img/gallery3.png' %}"></a>
+                </div>
+                <div class="col-md-4">
+                    <a href="{% static 'bootstrap/img/gallery4.png' %}" class="popup-image"><img src="{% static 'bootstrap/img/gallery4.png' %}"></a>
+                </div>
+                <div class="col-md-4">
+                    <a href="{% static 'bootstrap/img/gallery6.png' %}" class="popup-image"><img src="{% static 'bootstrap/img/gallery6.png' %}"></a>
+                </div>
+                <div class="col-md-4">
+                    <a href="{% static 'bootstrap/img/gallery5.png' %}" class="popup-image"><img src="{% static 'bootstrap/img/gallery5.png' %}"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end gallery -->
+
+    <!-- Наши тарифы -->
+    <div id="pricing" class="pricing">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-md col-md-left">
+                    <div class="content-left">
+                        <h2>Выберите свой <br>тарифный план</h2>
+                        <p>Подберите именно то, что подойдет Вам или Вашей организации</p>
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="content">
+                        <h4>1 месяц</h4>
+                        <p>Тариф на месяц для вас</p>
+                        <ul>
+                            <li><i class="la la-check-circle"></i> Автоматическая конвертация</li>
+                            <li><i class="la la-check-circle"></i> Редактор</li>
+                            <li><i class="la la-check-circle"></i> Бесплатная поддержка</li>
+                        </ul>
+                        <h2>$35</h2>
+                        <button class="button">Выбрать</button>
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="content">
+                        <h4>1 год</h4>
+                        <p>Тариф на год для вас</p>
+                        <ul>
+                            <li><i class="la la-check-circle"></i> Автоматическая конвертация</li>
+                            <li><i class="la la-check-circle"></i> Редактор</li>
+                            <li><i class="la la-check-circle"></i> Бесплатная поддержка</li>
+                        </ul>
+                        <h2>$350</h2>
+                        <button class="button">Выбрать</button>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end pricing -->
+
+    <!-- Контакты -->
+    <div id="contact" class="contact">
+        <div class="container">
+            <div class="content-map">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387193.3059353029!2d-74.25986548248684!3d40.69714941932609!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sKota%20New%20York%2C%20New%20York%2C%20Amerika%20Serikat!5e0!3m2!1sid!2sid!4v1639286790548!5m2!1sid!2sid" height="510" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+            <div class="row g-5">
+                <div class="col-md col-sm-12">
+                    <h2>Контакты для связи</h2>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing, elit. Voluptates dignissimos nesciunt repellat minus vero molestiae, magnam sed provident similique distinctio.</p>
+                    
+                    <div class="row">
+                        <div class="col">
+                            <div class="icon"><i class="la la-phone"></i></div>
+                            <div class="text">
+                                <h5>Phone</h5>
+                                <span>+61 3 8376 6284 </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="icon"><i class="la la-envelope"></i></div>
+                            <div class="text">
+                                <h5>Email</h5>
+                                <span> contact@domain.com </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="icon"><i class="la la-university"></i></div>
+                            <div class="text">
+                                <h5>Barcelona</h5>
+                                <span>121 King Street, Melbourne Victoria 3000</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md col-sm-12">
+                    <div class="open">
+                        <h3>Monday - Saturday</h3>
+                        <span>08:00 AM - 12.00 PM</span>
+                        <h3>Sunday</h3>
+                        <span>Open 24 Hours</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end contact -->
+    
+
+    <!-- testimonial -->
+    <div id="testimonial" class="testimonial">
+        <div class="container">
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="content">
+                            <p>Lorem ipsum, dolor sit amet consectetur, adipisicing elit. Voluptas quis vel asperiores incidunt illum placeat ab, ex iste reprehenderit ipsa commodi reicien ipsum, dolor sit amet consectetur, adipisicing elit. Voluptas quis vel asperiores incidunt illum </p>
+                            <div class="text">
+                                <h5>John Doe</h5>
+                                <span>Directur</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="content">
+                            <p>Lorem ipsum, dolor sit amet consectetur, adipisicing elit. Voluptas quis vel asperiores incidunt illum placeat ab, ex iste reprehenderit ipsa commodi reicien ipsum, dolor sit amet consectetur, adipisicing elit. Voluptas quis vel asperiores incidunt illum </p>
+                            <div class="text">
+                                <h5>Mario</h5>
+                                <span>Marketing</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="content">
+                            <p>Lorem ipsum, dolor sit amet consectetur, adipisicing elit. Voluptas quis vel asperiores incidunt illum placeat ab, ex iste reprehenderit ipsa commodi reicien ipsum, dolor sit amet consectetur, adipisicing elit. Voluptas quis vel asperiores incidunt illum </p>
+                            <div class="text">
+                                <h5>Wesley</h5>
+                                <span>Programming</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="content">
+                            <p>Lorem ipsum, dolor sit amet consectetur, adipisicing elit. Voluptas quis vel asperiores incidunt illum placeat ab, ex iste reprehenderit ipsa commodi reicien ipsum, dolor sit amet consectetur, adipisicing elit. Voluptas quis vel asperiores incidunt illum </p>
+                            <div class="text">
+                                <h5>Rami</h5>
+                                <span>Designer</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-button-prev prev-slide"></div>
+                <div class="swiper-button-next next-slide"></div>
+            </div>
+        </div>
+    </div>
+    <!-- end testimonial -->
+    
+    <!-- end intro -->
+{% endblock %}

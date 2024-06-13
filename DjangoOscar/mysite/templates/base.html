@@ -1,0 +1,130 @@
+<!-- base.html -->
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{% static 'bootstrap/img/favicon.png' %}">
+    <title>Ales</title>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/line-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/swiper.min.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/style.css' %}">
+
+     <!-- Стили для фиксированной шапки -->
+     <style>
+        body {
+            padding-top: 70px; /* Высота вашей фиксированной шапки */
+        }
+    </style>
+
+</head>
+
+<body>
+    <!-- loader -->
+    <div class="loader">
+        <div class="loading">
+            <div class="spinner-grow aloader" role="status">
+                <span class="sr-only"></span>
+            </div>
+        </div>
+    </div>
+    <!-- end loader -->
+
+    <!-- navbar -->
+    <div id="navbar" class="navbar navbar-expand-lg justify-content-center align-items-center">
+        <div class="container">
+            <a href="/" class="navbar-brand"><img src="{% static 'bootstrap/img/logo.png' %}" alt=""></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="la la-bars"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav nav">
+                    <li class="nav-item"><a class="nav-link" href="/#about">Как это работает</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/#gallery">Возможности</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/#pricing">Наши тарифы</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/#contact">Контакты</a></li>
+                </ul>
+            </div>
+
+            <ul class="button-navbar">
+                <li><a href="{% url 'upload' %}" class="button">Загрузить файл</a></li>
+            </ul>
+
+            <ul class="button-navbar">
+                {% if user.is_authenticated %}
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ user.username }}
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item" href="/profile">Профиль</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form action="{% url 'logout' %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-item">Выход</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                {% else %}
+                    <li><a href="/login" class="button">Войти</a></li>
+                {% endif %}
+            </ul>
+
+        </div>
+    </div>
+    <!-- end navbar -->
+
+    <!-- Основной контент -->
+
+    {% block content %}
+        <!-- Ваш контент здесь -->
+    {% endblock %}
+
+    <!-- footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md col-sm-6">
+                    <ul>
+                        <li><a href=""><i class="la la-facebook"></i></a></li>
+                        <li><a href=""><i class="la la-twitter"></i></a></li>
+                        <li><a href=""><i class="la la-instagram"></i></a></li>
+                        <li><a href=""><i class="la la-youtube"></i></a></li>
+                    </ul>
+                </div>
+                <div class="col-md col-sm-6">
+                    <div class="cp">
+                        <span> Copyright © All Right Reserved </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- end footer -->
+
+    <!-- script -->
+
+    <!-- script -->
+    <script src="{% static 'bootstrap/js/jquery.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/jquery.filterizr.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/magnific-popup.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/swiper.min.js' %}"></script>
+
+    <script src="{% static 'bootstrap/js/table_upload.js' %}"></script>
+    <script src="{% static 'bootstrap/js/main.js' %}"></script>
+
+
+
+    
+
+</body>
+</html>

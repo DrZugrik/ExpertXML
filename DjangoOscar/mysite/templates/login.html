@@ -1,0 +1,52 @@
+<!-- user_profile.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% load static %}   
+
+<link rel="stylesheet" href="{% static 'bootstrap/css/login_.css' %}">
+
+<!-- intro -->
+<div id="home" class="intro">
+    <div class="container">
+        <div class="content">
+            <div class="row align-items-center justify-content-center"> <!-- Изменено здесь -->
+                <div class="col-md">
+
+                    <div class="container mt-5">
+                        <div class="row justify-content-center">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h3 class="card-title text-center">Вход на сайт</h3>
+                                        <form method="post" action="{% url 'login' %}">
+                                            {% csrf_token %}
+                                            <div class="form-group">
+                                                <label for="username">Логин:</label>
+                                                <input type="text" name="username" class="form-control" id="username" placeholder="Введите ваш логин">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="password">Пароль:</label>
+                                                <input type="password" name="password" class="form-control" id="password" placeholder="Введите ваш пароль">
+                                            </div>
+                                            <button type="submit" class="btn btn-primary btn-block">Войти</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end intro --> 
+
+<!-- Подключаем скрипт Bootstrap для работы интерактивных элементов -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+{% endblock %}
