@@ -3,15 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from mysite.forms import FileUploadForm
-from mysite.models import XMLSchema, AI_Models
+from mysite.models import XMLSchema, UploadedFile
 
-# Один раз объявляем функцию get_schemas
 def get_schemas(request):
     schemas = XMLSchema.get_schema_choices()
     return JsonResponse({'schemas': list(schemas)})
 
-
-# Остальные представления
 def home(request):
     return render(request, "index.html")
 
@@ -27,37 +24,38 @@ def pricing(request):
 def contact(request):
     return render(request, "contact.html")
 
+@login_required
 def upload(request):
     if request.method == 'POST':
         form = FileUploadForm(request.POST, request.FILES)
         if form.is_valid():
             uploaded_file = form.save(commit=False)
-            uploaded_file.uploaded_by = request.user  # Устанавливаем пользователя
+            uploaded_file.uploaded_by = request.user
             uploaded_file.save()
+            print("File uploaded successfully:", uploaded_file.file.name)
             return redirect('redact_form')
     else:
         form = FileUploadForm()
+    
     schemas = XMLSchema.get_schema_choices()
     return render(request, 'upload.html', {'form': form, 'schemas': schemas})
 
-
-
-
+@login_required
 def redact_form(request):
     if request.method == 'POST':
         form = FileUploadForm(request.POST, request.FILES)
         if form.is_valid():
-            pdf_file = request.FILES['fileInput']
+            uploaded_file = request.FILES['file']
             # Ваш код обработки PDF-файла здесь
-            print("PDF file uploaded successfully:", pdf_file.name)  # Добавляем вывод в консоль
-            return HttpResponse(f"Результаты анализа PDF-файла: {pdf_file}")
+            print("PDF file uploaded successfully:", uploaded_file.name)
+            
     else:
         form = FileUploadForm()
-    uploaded_files = request.FILES.getlist('fileInput')
-    return render(request, 'redact_form.html', {'form': form, 'uploaded_files': uploaded_files})
+    
+    return render(request, 'redact_form.html', {'form': form})
 
+@login_required
 def profile(request):
-    # Логика для отображения профиля пользователя
     return render(request, 'user_profile.html')
 
 def login_view(request):

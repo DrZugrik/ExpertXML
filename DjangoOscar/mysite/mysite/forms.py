@@ -7,16 +7,10 @@ from .models import UploadedFile
 class FileUploadForm(forms.ModelForm):
     class Meta:
         model = UploadedFile
-        fields = ['name', 'file']
+        fields = ['file', 'name']
 
 
 class AnalysisResultsForm(forms.Form):
     results = forms.CharField(widget=forms.Textarea)
-
-
-
-
-
-
 
 

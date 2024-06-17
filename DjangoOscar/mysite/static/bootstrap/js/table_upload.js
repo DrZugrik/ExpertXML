@@ -66,6 +66,7 @@ function handleFiles(files) {
 
 document.addEventListener("DOMContentLoaded", function() {
     // Код, который нужно выполнить после загрузки DOM
+    const elements = document.querySelectorAll('.some-class');
     let dropArea = document.getElementById("drop-area");
     if (dropArea) {
         // Подписываемся на события для dropArea только если он существует

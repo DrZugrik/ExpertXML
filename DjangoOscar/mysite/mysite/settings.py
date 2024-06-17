@@ -148,3 +148,7 @@ LOGIN_REDIRECT_URL = '/profile/'  # Здесь '/profile/' - это URL ваше
 
 LOGIN_URL = '/login/'  # Здесь '/login/' - это URL вашего шаблона входа
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
+MEDIA_URL = '/media/'
+
+

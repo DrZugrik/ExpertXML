@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block content %}
-    
     <style>
         #fileTable {
             display: none;
@@ -20,17 +19,17 @@
             height: 50px;
             border-radius: 50%;
             border: none;
-            background-color: rgb(255, 187, 0); /* Исправлено здесь */
+            background-color: rgb(255, 187, 0);
             transition: .4s;
         }
         .step-button[aria-expanded="true"] {
             width: 60px;
             height: 60px;
-            background-color: #ff0000; /* Исправлено здесь */
+            background-color: #ff0000;
             color: #4d473b;
         }
         .done {
-            background-color: #1cbd64; /* Исправлено здесь */
+            background-color: #1cbd64;
             color: #4d473b;
         }
         .step-item {
@@ -38,7 +37,7 @@
             text-align: center;
         }
         #progress {
-            -webkit-appearance:none;
+            -webkit-appearance: none;
             position: absolute;
             width: 95%;
             z-index: 5;
@@ -47,7 +46,6 @@
             margin-bottom: 18px;
         }
         
-        /* правим стили прогресс-бара */
         #progress::-webkit-progress-value {
             background-color: var(red);
             transition: .5s ease;
@@ -55,10 +53,8 @@
         #progress::-webkit-progress-bar {
             background-color: var(red);
         }
-
     </style>
 
-    <!-- intro -->
     <div id="home" class="intro">
         <div class="container">
             <div class="content">
@@ -72,7 +68,7 @@
                             <div class="container">
                                 <div class="accordion" id="accordionExample">
                                     <div class="steps">
-                                        <progress id="progress" value=0 max=100 ></progress>
+                                        <progress id="progress" value=0 max=100></progress>
 
                                         <div class="step-item">
                                             <button class="step-button text-center" type="button" data-bs-toggle="collapse"
@@ -100,11 +96,10 @@
                                     </div>
                              
                                     <div class="card">
-                                        <div  id="headingOne"></div>
+                                        <div id="headingOne"></div>
                                         <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
                                             data-bs-parent="#accordionExample">
                                             <div class="card-body">
-
                                                 <div class="container mt-5">
                                                     <div class="card">
                                                         <div class="card-body">
@@ -138,19 +133,16 @@
                                                 
                                                     <div class="container mt-5" id="analysisButtonContainer" style="display: none;">
                                                         <ul class="button-navbar">
-                                                            <form id="uploadForm" action="{% url 'redact_form' %}"   method="POST" enctype="multipart/form-data">
+                                                            <form id="uploadForm" action="{% url 'redact_form' %}" method="POST" enctype="multipart/form-data">
                                                                 {% csrf_token %}
                                                                 <input type="file" id="fileInput" multiple accept=".pdf" class="d-none" name="fileInput">
+                                                                {{ form.as_p }}
                                                                 <button class="btn btn-primary" type="Submit">Перейти к редактированию</button>
                                                             </form>
                                                         </ul>
                                                     </div>
-                                                    
-                                                    
-
                     
                                                     <script>
-                                                        // Проверяем, отображается ли таблица, и если да, то показываем кнопку "Анализ"
                                                         if (document.getElementById('fileTable').style.display !== 'none') {
                                                             document.getElementById('analysisButtonContainer').style.display = 'block';
                                                         }
@@ -161,7 +153,7 @@
                                     </div>
 
                                     <div class="card">
-                                        <div  id="headingTwo"></div>
+                                        <div id="headingTwo"></div>
                                         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                             <div class="card-body">
                                                 Вход в системму
@@ -170,13 +162,11 @@
                                     </div>
 
                                     <div class="card">
-                                        <div  id="headingThree"></div>
+                                        <div id="headingThree"></div>
                                         <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
                                             data-bs-parent="#accordionExample">
                                             <div class="card-body">
-
                                                 {% block redact %}
-                                                <!-- Ваш контент здесь -->
                                                 {% endblock %}
                                             </div>
                                         </div>
@@ -190,42 +180,39 @@
         </div>
     </div>
 
-    
-
-   
-
     <script>
+        document.getElementById("uploadForm").addEventListener("submit", function(event) {
+            const form = document.getElementById("uploadForm");
 
-document.getElementById("uploadForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // Предотвращаем стандартное поведение формы
-    
-    // Получаем данные формы
-    const formData = new FormData(this);
+            form.addEventListener("submit", function(event) {
+                event.preventDefault(); // Предотвращаем стандартное поведение формы
+                const formData = new FormData(form);
+                const url = "{% url 'redact_form' %}";
 
-    // Отправляем данные на сервер с использованием fetch
-    fetch('{% url 'redact_form' %}', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Произошла ошибка при отправке данных на сервер.');
-        }
-        // Обработка успешного ответа от сервера (если необходимо)
-        return response.json(); // или response.text(), в зависимости от ожидаемого формата ответа
-    })
-    .then(data => {
-        // Обработка данных, полученных от сервера (если необходимо)
-        console.log('Данные успешно отправлены на сервер:', data);
-    })
-    .catch(error => {
-        // Обработка ошибок при отправке данных на сервер
-        console.error('Ошибка при отправке данных на сервер:', error);
-    });
-});
-
-
-        // Функция для отображения выбранных файлов в таблице
+                fetch(url, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken') // Передаем CSRF-токен в заголовке
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Произошла ошибка при отправке данных на сервер.');
+                    }
+                    return response.json(); // Возвращаем JSON-ответ от сервера
+                })
+                .then(data => {
+                    console.log('Данные успешно отправлены на сервер:', data);
+                    // Переход на страницу редактирования
+                    window.location.href = '{% url "redact_form" %}?file=' + data.file;
+                })
+                .catch(error => {
+                    console.error('Ошибка при отправке данных на сервер:', error);
+                });
+            });
+        });
+        
         function displayFiles(files, schemas) {
             let tableBody = document.getElementById("fileTableBody");
             let existingRowCount = tableBody.children.length;
@@ -242,28 +229,23 @@ document.getElementById("uploadForm").addEventListener("submit", function(event)
                 tableBody.appendChild(row);
             });
 
-            // Отображаем таблицу
             document.getElementById("fileTable").style.display = "table";
-            updateRowNumbers(); // Обновляем номера строк после добавления новых строк
+            updateRowNumbers();
         }
 
-        // Функция для определения схемы файла
         function detectSchema(file, schemas) {
-            // Создаем строку HTML для <select> с вариантами схем
             var selectHtml = '<select class="form-select">';
             schemas.forEach(function(schema) {
                 selectHtml += `<option value="${schema[0]}">${schema[1]}</option>`;
             });
             selectHtml += '</select>';
-
-            // Возвращаем строку HTML, чтобы она могла быть вставлена в ячейку таблицы
             return selectHtml;
         }
 
         function removeFile(button) {
             let row = button.parentElement.parentElement;
             row.remove();
-            updateRowNumbers(); // Обновляем номера строк после удаления строки
+            updateRowNumbers();
         }
 
         function updateRowNumbers() {
@@ -273,107 +255,79 @@ document.getElementById("uploadForm").addEventListener("submit", function(event)
             }
         }
 
-        // Функция для расчета CRC файла (простой пример)
         function calculateCRC(file) {
-            // Здесь может быть ваша реализация расчета CRC
-            return "12345678"; // Временный заглушка
+            return "12345678";
         }
 
-        // Обработчик события выбора файлов
         function handleFiles(files) {
-            // Получаем список XML схем из Django
-            fetch('/get_schemas/') // Ваш URL для получения списка схем
+            fetch('/get_schemas/')
             .then(response => response.json())
             .then(data => {
-                // Отображаем выбранные файлы и список схем в таблице
                 displayFiles(files, data.schemas); 
             })
             .catch(error => console.error('Ошибка при получении списка схем:', error));
         }
 
         document.addEventListener("DOMContentLoaded", function() {
-            // Код, который нужно выполнить после загрузки DOM
             let dropArea = document.getElementById("drop-area");
             if (dropArea) {
-                // Подписываемся на события для dropArea только если он существует
                 ["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
                     dropArea.addEventListener(eventName, preventDefaults, false);
                 });
             }
         });
 
-        // Функция для предотвращения стандартных событий
         function preventDefaults(e) {
             e.preventDefault();
             e.stopPropagation();
         }
 
-        // Ваш остальной код здесь
-        // Например:
-        function handleDragEnter(event) {
-            // Обработка события drag enter
-        }
+        function handleDragEnter(event) {}
 
-        // Получаем область перетаскивания файлов
         let dropArea = document.getElementById("drop-area");
 
-        // Предотвращаем стандартные события
         ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
             dropArea.addEventListener(eventName, preventDefaults, false);
             document.body.addEventListener(eventName, preventDefaults, false);
         });
 
-        // Подсвечиваем область при наведении
         ["dragenter", "dragover"].forEach((eventName) => {
             dropArea.addEventListener(eventName, highlight, false);
         });
 
-        // Убираем подсветку области при выходе за ее пределы или завершении перетаскивания
         ["dragleave", "drop"].forEach((eventName) => {
             dropArea.addEventListener(eventName, unhighlight, false);
         });
 
-        // Обрабатываем событие перетаскивания файлов
         dropArea.addEventListener("drop", handleDrop, false);
 
-        // Предотвращаем стандартное поведение браузера
         function preventDefaults(e) {
             e.preventDefault();
             e.stopPropagation();
         }
 
-        // Подсветка области при наведении
         function highlight(e) {
             dropArea.classList.add("highlight");
         }
 
-        // Убираем подсветку области
         function unhighlight(e) {
             dropArea.classList.remove("highlight");
         }
 
-        // Обработка события перетаскивания файлов
         function handleDrop(e) {
             let dt = e.dataTransfer;
             let files = dt.files;
             handleFiles(files);
         }
 
-        // Назначаем событие click на область, чтобы открыть стандартный диалог выбора файлов
         dropArea.addEventListener("click", () => {
             fileElem.click();
         });
 
-        // Назначаем обработчик события изменения файлов на input[type=file]
         let fileElem = document.getElementById("fileElem");
         fileElem.addEventListener("change", function (e) {
             handleFiles(this.files);
         });
-
     </script>
-    
-    
-
-    <!-- end intro -->
 
 {% endblock %}
