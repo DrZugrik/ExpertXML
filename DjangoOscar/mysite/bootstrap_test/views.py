@@ -1,8 +1,8 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse
-from mysite.forms import FileUploadForm
+from django.http import JsonResponse
+from mysite.forms import FileUploadForm  # Импорт обеих форм
 from mysite.models import XMLSchema, UploadedFile
 
 def get_schemas(request):
@@ -24,6 +24,7 @@ def pricing(request):
 def contact(request):
     return render(request, "contact.html")
 
+'''
 @login_required
 def upload(request):
     if request.method == 'POST':
@@ -39,6 +40,23 @@ def upload(request):
     
     schemas = XMLSchema.get_schema_choices()
     return render(request, 'upload.html', {'form': form, 'schemas': schemas})
+'''
+@login_required
+def upload_file(request):
+    if request.method == 'POST':
+        form = FileUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            uploaded_file = form.save(commit=False)
+            uploaded_file.uploaded_by = request.user
+            print("File uploaded successfully:", uploaded_file.file.name)
+            uploaded_file.save()
+            return redirect('redact_form')
+    else:
+        form = FileUploadForm()
+    
+    schemas = XMLSchema.get_schema_choices()
+    return render(request, 'upload.html', {'form': form, 'schemas': schemas})
+
 
 @login_required
 def redact_form(request):

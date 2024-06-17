@@ -61,6 +61,16 @@ class XMLSchema(models.Model):
         # Возвращаем выборку схем
         return cls.objects.values_list('id', 'name')
 
+'''
+class UploadedFile(models.Model):
+    file = models.FileField(upload_to='uploads/')
+    name = models.CharField(max_length=255)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+'''
 
 class UploadedFile(models.Model):
     file = models.FileField(upload_to='uploads/')

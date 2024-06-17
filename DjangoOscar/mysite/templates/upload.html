@@ -136,9 +136,15 @@
                                                             <form id="uploadForm" action="{% url 'redact_form' %}" method="POST" enctype="multipart/form-data">
                                                                 {% csrf_token %}
                                                                 <input type="file" id="fileInput" multiple accept=".pdf" class="d-none" name="fileInput">
-                                                                {{ form.as_p }}
                                                                 <button class="btn btn-primary" type="Submit">Перейти к редактированию</button>
                                                             </form>
+
+                                                            <form method="post" enctype="multipart/form-data">
+                                                                {% csrf_token %}
+                                                                {{ form.as_p }}
+                                                                <button type="submit">Загрузить</button>
+                                                            </form>
+
                                                         </ul>
                                                     </div>
                     
