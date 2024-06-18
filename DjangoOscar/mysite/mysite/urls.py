@@ -1,3 +1,5 @@
+# urls.py
+
 from django.contrib import admin
 from django.urls import path, include
 from django.views.static import serve
@@ -5,6 +7,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from bootstrap_test import views
 from django.contrib.auth.views import LogoutView
+
 
 urlpatterns = [
     path("", views.home, name="home"),  # Путь для главной страницы
@@ -20,8 +23,12 @@ urlpatterns = [
     path("logout/", LogoutView.as_view(next_page="/"), name="logout"),
     path("profile/", views.profile, name="profile"),
     path('upload/', views.upload_file, name='upload'),
+
+
 ]
 
 # Добавляем обработчик для медиа-файлов только в режиме отладки
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+

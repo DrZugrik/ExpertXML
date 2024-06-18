@@ -1,0 +1,35 @@
+<!-- profile/user_uploads.html -->
+
+{% block content %}
+
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="users" role="tabpanel" aria-labelledby="users-tab">
+            <table class="table table-bordered table-striped">
+                <thead class="table-info">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Login</th>
+                        <th scope="col">Документ</th>
+                        <th scope="col">Дата добавления</th>
+                        <th scope="col">XML</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <th scope="row">{{ user.id }}</th>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.document }}</td>
+                        <td>{{ user.date_added }}</td>
+                        <td>{{ user.xml }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+        </div>
+
+    </div>
+</main>
+
+{% endblock %}

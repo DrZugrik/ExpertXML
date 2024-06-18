@@ -1,0 +1,20 @@
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>Колонка 1</th>
+            <th>Колонка 2</th>
+            <th>Колонка 3</th>
+            <th>Колонка 4</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.field1 }}</td>
+            <td>{{ user.field2 }}</td>
+            <td>{{ user.field3 }}</td>
+            <td>{{ user.field4 }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

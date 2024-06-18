@@ -1,9 +1,14 @@
+# views.py
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from mysite.forms import FileUploadForm  # Импорт обеих форм
 from mysite.models import XMLSchema, UploadedFile
+
+from django.template.loader import render_to_string
+from mysite.models import UserProfile
 
 def get_schemas(request):
     schemas = XMLSchema.get_schema_choices()
@@ -72,9 +77,18 @@ def redact_form(request):
     
     return render(request, 'redact_form.html', {'form': form})
 
+
+
+
+# Обработка профиля
 @login_required
 def profile(request):
-    return render(request, 'user_profile.html')
+    # Получаем все профили пользователей и их загруженные файлы
+    user_profiles = UserProfile.objects.all()
+
+    # Передаем данные в шаблон user_profile.html
+    return render(request, 'user_profile.html', {'user_profiles': user_profiles})
+
 
 def login_view(request):
     if request.method == 'POST':
@@ -89,3 +103,8 @@ def login_view(request):
             return render(request, 'login.html', {'error_message': error_message})
     else:
         return render(request, 'login.html')
+    
+
+def user_profile_view(request):
+    user_profiles = UserProfile.objects.all()
+    return render(request, 'user_profile.html', {'user_profiles': user_profiles})

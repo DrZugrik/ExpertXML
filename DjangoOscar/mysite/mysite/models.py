@@ -80,3 +80,13 @@ class UploadedFile(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    document = models.CharField(max_length=255)
+    date_added = models.DateTimeField(auto_now_add=True)
+    xml_data = models.TextField()
+    
+    def __str__(self):
+        return self.user.username
