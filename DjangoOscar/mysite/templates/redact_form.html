@@ -3,17 +3,18 @@
 {% load static %}
 
 {% block redact %}
- 
-    <!-- intro 2 -->
-    <div id="home" class="intro">
-        <div class="card">
+<div id="home" class="intro">
+    <div class="card">
+            {% if latest_file %}
+
             <div class="card-header">
                 <ul class="nav nav-tabs card-header-tabs">
-                    <li class="nav-item"><a class="nav-link active" href="#">First Item</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Second Item</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Third Item</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#">{{ latest_file.name }}</a></li>
                 </ul>
             </div>
+            {% else %}
+            <p>No files uploaded....</p>
+            {% endif %}
             <div class="card-body">
                 <div class="container">
                     <div class="row">

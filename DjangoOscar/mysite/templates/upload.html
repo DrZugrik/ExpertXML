@@ -139,14 +139,11 @@
                                                                 <button class="btn btn-primary" type="Submit">Перейти к редактированию</button>
                                                             </form>
 
-                                                            <form method="post" enctype="multipart/form-data">
+                                                            <form action="" method="post" enctype="multipart/form-data">
                                                                 {% csrf_token %}
                                                                 {{ form.as_p }}
                                                                 <button type="submit">Загрузить</button>
                                                             </form>
-
-                                                            
-
                                                         </ul>
                                                     </div>
                     
@@ -190,6 +187,7 @@
 
     <script>
         document.getElementById("uploadForm").addEventListener("submit", function(event) {
+            
             const form = document.getElementById("uploadForm");
 
             form.addEventListener("submit", function(event) {

@@ -1,6 +1,7 @@
 from django.db import models
 import datetime
 from django.contrib.auth.models import User
+from django.core.validators import FileExtensionValidator
 
 
 
@@ -73,7 +74,8 @@ class UploadedFile(models.Model):
 '''
 
 class UploadedFile(models.Model):
-    file = models.FileField(upload_to='uploads/')
+#    file = models.FileField(upload_to='uploads/')
+    file = models.FileField(upload_to='uploads/', validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
     name = models.CharField(max_length=255)
     uploaded_at = models.DateTimeField(auto_now_add=True)
     uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)

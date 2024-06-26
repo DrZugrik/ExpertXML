@@ -24,6 +24,8 @@ urlpatterns = [
     path("profile/", views.profile, name="profile"),
     path('upload/', views.upload_file, name='upload'),
 
+    path('user_statistic/', views.user_statistic, name='user_statistic'),
+
 
 ]
 
