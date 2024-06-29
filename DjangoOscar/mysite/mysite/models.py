@@ -62,16 +62,6 @@ class XMLSchema(models.Model):
         # Возвращаем выборку схем
         return cls.objects.values_list('id', 'name')
 
-'''
-class UploadedFile(models.Model):
-    file = models.FileField(upload_to='uploads/')
-    name = models.CharField(max_length=255)
-    uploaded_at = models.DateTimeField(auto_now_add=True)
-    uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.name
-'''
 
 class UploadedFile(models.Model):
 #    file = models.FileField(upload_to='uploads/')
@@ -81,14 +71,24 @@ class UploadedFile(models.Model):
     uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return self.file.name
     
 
+    
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    document = models.CharField(max_length=255)
-    date_added = models.DateTimeField(auto_now_add=True)
-    xml_data = models.TextField()
+    first_name = models.CharField("Имя", max_length=30, null=True, blank=True)
+    surname = models.CharField("Фамилия", max_length=30, null=True, blank=True)
+    last_name = models.CharField("Отчество", max_length=30, null=True, blank=True)
+    photo = models.ImageField("Фото", upload_to='user_photos/', null=True, blank=True)
+    company = models.CharField("Организация", max_length=255, null=True, blank=True)
+    date_birth = models.DateField("Дата рождения", null=True, blank=True)
+    date_joined = models.DateTimeField("Дата регистрации", default=datetime.date.today)
+    groups = models.CharField("Группы", max_length=255, null=True, blank=True)
     
     def __str__(self):
         return self.user.username
+
+    class Meta:
+        verbose_name = "Профиль пользователя"
+        verbose_name_plural = "Профили пользователей"

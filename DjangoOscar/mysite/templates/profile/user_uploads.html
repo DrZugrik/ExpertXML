@@ -12,7 +12,9 @@
                         <th scope="col">Login</th>
                         <th scope="col">Документ</th>
                         <th scope="col">Дата добавления</th>
-                        <th scope="col">XML</th>
+                        <th scope="col">XML схема</th>
+                        <th scope="col">статус XML разметки</th>
+                        <th scope="col">Редактирование</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -23,10 +25,15 @@
                         <td>{{ file.name }}</td>
                         <td>{{ file.uploaded_at }}</td>
                         <td>{{ file.xml }}</td>
+                        <td>{{ file.xml_status }}</td>
+                        <td>
+                            <a href="{% url 'edit_file' file.id %}" class="btn btn-primary btn-sm">Редактировать</a>
+                            <button class="btn btn-danger btn-sm delete-file-btn" data-file-id="{{ file.id }}">Удалить</button>
+                        </td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="5">No files uploaded yet</td>
+                        <td colspan="7">No files uploaded yet</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -34,5 +41,41 @@
         </div>
     </div>
 </main>
+
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.delete-file-btn').forEach(function(button) {
+        button.addEventListener('click', function() {
+            const fileId = this.getAttribute('data-file-id');
+            const csrfToken = '{{ csrf_token }}'; // Получение CSRF токена
+
+            if (confirm('Вы уверены, что хотите удалить этот файл?')) {
+                fetch(`/delete_file/${fileId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrfToken,  // Добавление CSRF токена в заголовок
+                        'Content-Type': 'application/json'
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById(`file-${fileId}`).remove();
+                    } else {
+                        alert('Ошибка при удалении файла');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Ошибка при удалении файла');
+                });
+            }
+        });
+    });
+});
+</script>
 
 {% endblock %}

@@ -5,11 +5,11 @@
 {% block redact %}
 <div id="home" class="intro">
     <div class="card">
-            {% if latest_file %}
+            {% if file %}
 
             <div class="card-header">
                 <ul class="nav nav-tabs card-header-tabs">
-                    <li class="nav-item"><a class="nav-link active" href="#">{{ latest_file.name }}</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#">{{ file.name }}</a></li>
                 </ul>
             </div>
             {% else %}

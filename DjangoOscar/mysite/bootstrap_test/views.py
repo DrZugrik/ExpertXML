@@ -4,16 +4,26 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from mysite.forms import FileUploadForm  # Импорт обеих форм
+from mysite.forms import FileUploadForm, FileEditForm, UserRegisterForm  # Импорт обеих форм
 from mysite.models import XMLSchema, UploadedFile
-from django.db.models import Count
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+
 from django.db.models.functions import TruncDay
+from django.contrib import messages
 
 from django.template.loader import render_to_string
 from mysite.models import UserProfile
 from django.utils import timezone
+from django.contrib.auth.models import User
+from django.db.models import Count
+
+from django.views.decorators.http import require_POST
 
 import json
+import logging
 
 
 def get_schemas(request):
@@ -87,6 +97,28 @@ def redact_form(request):
     return render(request, 'redact_form.html', {'form': form})
 
 
+def user_uploads(request):
+    uploaded_files = UploadedFile.objects.all()
+    return render(request, 'profile/user_uploads.html', {'uploaded_files': uploaded_files})
+
+
+def edit_file(request, file_id):
+    file = get_object_or_404(UploadedFile, id=file_id)
+    if request.method == 'POST':
+        form = FileEditForm(request.POST, request.FILES, instance=file)
+        if form.is_valid():
+            form.save()
+            return redirect('user_uploads')
+    else:
+        form = FileEditForm(instance=file)
+    return render(request, 'redact_form.html', {'form': form, 'file': file})  # Передаем объект file в контексте
+
+
+@require_POST
+def delete_file(request, file_id):
+    file = get_object_or_404(UploadedFile, id=file_id)
+    file.delete()
+    return JsonResponse({'success': True})
 
 
 
@@ -99,19 +131,22 @@ def redact_form(request):
 def profile(request):
     # Получаем текущего пользователя
     user = request.user
-    
+    users = User.objects.all()  # Получаем всех пользователей
+    schemas = XMLSchema.objects.all()
+
     # Получаем загруженные файлы текущего пользователя
     uploaded_files = UploadedFile.objects.filter(uploaded_by=user)
 
     # Передаем данные в шаблон 'user_profile.html'
     context = {
         'user': user,
+        'users': users,
         'uploaded_files': uploaded_files,  # Передаем список загруженных файлов текущего пользователя
+        'schemas': schemas,
     }
     return render(request, 'user_profile.html', context)
 #    return render(request, 'profile/user_uploads.html', context)
 
-    
 
 
 
@@ -134,35 +169,34 @@ def user_profile_view(request):
     user_profiles = UserProfile.objects.all()
     return render(request, 'user_profile.html', {'user_profiles': user_profiles})
 
+def admin_users(request):
+    users = User.objects.all().select_related('userprofile')
+    return render(request, 'profile/admin_users.html', {'users': users})
+
+def register(request):
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Ваш аккаунт {username} был успешно создан! Вы можете войти в систему.')
+            login(request, user)  # Автоматический вход после регистрации
+            return redirect('profile')
+        else:
+            messages.error(request, 'Ошибка при регистрации. Пожалуйста, попробуйте снова.')
+    else:
+        form = UserRegisterForm()
+    return render(request, 'user_register.html', {'form': form})
+
 
 
 @login_required
 def user_statistic(request):
     user = request.user
-    
-    # Общее количество файлов
     total_files = UploadedFile.objects.filter(uploaded_by=user).count()
-
-    # Файлы, загруженные сегодня
-    start_of_today = now().replace(hour=0, minute=0, second=0, microsecond=0)
-    files_today = UploadedFile.objects.filter(uploaded_by=user, uploaded_at__gte=start_of_today).count()
-
-    # Файлы, загруженные в этом месяце
-    start_of_month = now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    files_this_month = UploadedFile.objects.filter(uploaded_by=user, uploaded_at__gte=start_of_month).count()
-
-    # Файлы, загруженные в этом году
-    start_of_year = now().replace(month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
-    files_this_year = UploadedFile.objects.filter(uploaded_by=user, uploaded_at__gte=start_of_year).count()
-
-    # Отладочный вывод
-    print(f"User: {user.username}, Total files: {total_files}, Files today: {files_today}, Files this month: {files_this_month}, Files this year: {files_this_year}")
 
     context = {
         'total_files': total_files,
-        'files_today': files_today,
-        'files_this_month': files_this_month,
-        'files_this_year': files_this_year,
+        'user': user,
     }
-    
-    return render(request, 'user_profile.html', {'total_files': total_files})
+    return render(request, 'user_profile.html', context)

@@ -14,6 +14,7 @@
             margin-bottom: 2rem;
             position: relative;
         }
+
         .step-button {
             width: 50px;
             height: 50px;
@@ -22,20 +23,24 @@
             background-color: rgb(255, 187, 0);
             transition: .4s;
         }
+
         .step-button[aria-expanded="true"] {
             width: 60px;
             height: 60px;
             background-color: #ff0000;
             color: #4d473b;
         }
+
         .done {
             background-color: #1cbd64;
             color: #4d473b;
         }
+
         .step-item {
             z-index: 10;
             text-align: center;
         }
+
         #progress {
             -webkit-appearance: none;
             position: absolute;
@@ -50,8 +55,30 @@
             background-color: var(red);
             transition: .5s ease;
         }
+
         #progress::-webkit-progress-bar {
             background-color: var(red);
+        }
+
+        .dropzone {
+            border: 2px dashed #39e65e;
+            padding: 20px;
+            text-align: center;
+            margin: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #drop-area {
+            border: 2px dashed #007bff;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #drop-area.dragover {
+            background-color: #e0e0e0;
         }
     </style>
 
@@ -68,7 +95,7 @@
                             <div class="container">
                                 <div class="accordion" id="accordionExample">
                                     <div class="steps">
-                                        <progress id="progress" value=0 max=100></progress>
+                                        <progress id="progress" value="0" max="100"></progress>
 
                                         <div class="step-item">
                                             <button class="step-button text-center" type="button" data-bs-toggle="collapse"
@@ -94,34 +121,31 @@
                                             <div class="step-title">Оплата</div>
                                         </div>
                                     </div>
-                             
+
                                     <div class="card">
                                         <div id="headingOne"></div>
                                         <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
                                             data-bs-parent="#accordionExample">
                                             <div class="card-body">
                                                 <div class="container mt-5">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div id="drop-area" class="border rounded d-flex justify-content-center align-items-center"
-                                                                style="height: 200px; cursor: pointer;">
-                                                                <div class="text-center">
-                                                                    <i class="bi bi-cloud-arrow-up-fill text-primary" style="font-size: 48px;"></i>
-                                                                    <p class="mt-3">Перетащите сюда файлы или выберите их через меню</p>
+                                                    <div class="container mt-5" id="analysisButtonContainer" style="display: none;">
+                                                        <ul class="button-navbar">
+                                                            <form id="uploadForm" method="post" enctype="multipart/form-data">
+                                                                {% csrf_token %}
+                                                                <div id="drop-area" class="dropzone">
+                                                                    Перетащите файлы сюда или <input type="file" id="fileUploader" name="file" multiple accept=".pdf">
                                                                 </div>
-                                                            </div>
-                                                            <input type="file" id="fileElem" multiple accept=".pdf" class="d-none">
-                                                        </div>
+                                                                <button class="btn btn-primary" type="submit">Загрузить</button>
+                                                            </form>
+                                                        </ul>
                                                     </div>
-                                                </div>
-                    
-                                                <div class="container mt-5">
+
                                                     <table id="fileTable" class="table table-hover">
                                                         <thead>
                                                             <tr>
                                                                 <th scope="col">#</th>
                                                                 <th scope="col">Имя файла</th>
-                                                                <th scope="col">CRC</th>
+                                                                <th scope="col">CRC.32</th>
                                                                 <th scope="col">Схема</th>
                                                                 <th scope="col">Действие</th>
                                                             </tr>
@@ -130,26 +154,18 @@
                                                             <!-- Здесь будут строки таблицы -->
                                                         </tbody>
                                                     </table>
-                                                
-                                                    <div class="container mt-5" id="analysisButtonContainer" style="display: none;">
-                                                        <ul class="button-navbar">
-                                                            <form id="uploadForm" action="{% url 'redact_form' %}" method="POST" enctype="multipart/form-data">
-                                                                {% csrf_token %}
-                                                                <input type="file" id="fileInput" multiple accept=".pdf" class="d-none" name="fileInput">
-                                                                <button class="btn btn-primary" type="Submit">Перейти к редактированию</button>
-                                                            </form>
-
-                                                            <form action="" method="post" enctype="multipart/form-data">
-                                                                {% csrf_token %}
-                                                                {{ form.as_p }}
-                                                                <button type="submit">Загрузить</button>
-                                                            </form>
-                                                        </ul>
-                                                    </div>
                     
                                                     <script>
                                                         if (document.getElementById('fileTable').style.display !== 'none') {
                                                             document.getElementById('analysisButtonContainer').style.display = 'block';
+                                                            let uploadForm = document.getElementById("uploadForm");
+                                                            if (uploadForm) {
+                                                                uploadForm.addEventListener("submit", function(event) {
+                                                                    // Ваш обработчик события
+                                                                });
+                                                            } else {
+                                                                console.error("Element with id 'uploadForm' not found!");
+                                                            }
                                                         }
                                                     </script>
                                                 </div>
@@ -161,7 +177,7 @@
                                         <div id="headingTwo"></div>
                                         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                             <div class="card-body">
-                                                Вход в системму
+                                                Вход в систему
                                             </div>
                                         </div>
                                     </div>
@@ -178,162 +194,12 @@
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <script>
-        document.getElementById("uploadForm").addEventListener("submit", function(event) {
-            
-            const form = document.getElementById("uploadForm");
-
-            form.addEventListener("submit", function(event) {
-                event.preventDefault(); // Предотвращаем стандартное поведение формы
-                const formData = new FormData(form);
-                const url = "{% url 'redact_form' %}";
-
-                fetch(url, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRFToken': getCookie('csrftoken') // Передаем CSRF-токен в заголовке
-                    }
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Произошла ошибка при отправке данных на сервер.');
-                    }
-                    return response.json(); // Возвращаем JSON-ответ от сервера
-                })
-                .then(data => {
-                    console.log('Данные успешно отправлены на сервер:', data);
-                    // Переход на страницу редактирования
-                    window.location.href = '{% url "redact_form" %}?file=' + data.file;
-                })
-                .catch(error => {
-                    console.error('Ошибка при отправке данных на сервер:', error);
-                });
-            });
-        });
-        
-        function displayFiles(files, schemas) {
-            let tableBody = document.getElementById("fileTableBody");
-            let existingRowCount = tableBody.children.length;
-
-            files.forEach((file, index) => {
-                let row = document.createElement("tr");
-                row.innerHTML = `
-                    <td>${existingRowCount + index + 1}</td>
-                    <td>${file.name}</td>
-                    <td>${calculateCRC(file)}</td>
-                    <td>${detectSchema(file, schemas)}</td>
-                    <td><button class="btn btn-danger btn-sm" onclick="removeFile(this)">Удалить</button></td>
-                `;
-                tableBody.appendChild(row);
-            });
-
-            document.getElementById("fileTable").style.display = "table";
-            updateRowNumbers();
-        }
-
-        function detectSchema(file, schemas) {
-            var selectHtml = '<select class="form-select">';
-            schemas.forEach(function(schema) {
-                selectHtml += `<option value="${schema[0]}">${schema[1]}</option>`;
-            });
-            selectHtml += '</select>';
-            return selectHtml;
-        }
-
-        function removeFile(button) {
-            let row = button.parentElement.parentElement;
-            row.remove();
-            updateRowNumbers();
-        }
-
-        function updateRowNumbers() {
-            let tableBody = document.getElementById("fileTableBody");
-            for (let i = 0; i < tableBody.children.length; i++) {
-                tableBody.children[i].getElementsByTagName('td')[0].innerText = i + 1;
-            }
-        }
-
-        function calculateCRC(file) {
-            return "12345678";
-        }
-
-        function handleFiles(files) {
-            fetch('/get_schemas/')
-            .then(response => response.json())
-            .then(data => {
-                displayFiles(files, data.schemas); 
-            })
-            .catch(error => console.error('Ошибка при получении списка схем:', error));
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            let dropArea = document.getElementById("drop-area");
-            if (dropArea) {
-                ["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
-                    dropArea.addEventListener(eventName, preventDefaults, false);
-                });
-            }
-        });
-
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-
-        function handleDragEnter(event) {}
-
-        let dropArea = document.getElementById("drop-area");
-
-        ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
-            dropArea.addEventListener(eventName, preventDefaults, false);
-            document.body.addEventListener(eventName, preventDefaults, false);
-        });
-
-        ["dragenter", "dragover"].forEach((eventName) => {
-            dropArea.addEventListener(eventName, highlight, false);
-        });
-
-        ["dragleave", "drop"].forEach((eventName) => {
-            dropArea.addEventListener(eventName, unhighlight, false);
-        });
-
-        dropArea.addEventListener("drop", handleDrop, false);
-
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-
-        function highlight(e) {
-            dropArea.classList.add("highlight");
-        }
-
-        function unhighlight(e) {
-            dropArea.classList.remove("highlight");
-        }
-
-        function handleDrop(e) {
-            let dt = e.dataTransfer;
-            let files = dt.files;
-            handleFiles(files);
-        }
-
-        dropArea.addEventListener("click", () => {
-            fileElem.click();
-        });
-
-        let fileElem = document.getElementById("fileElem");
-        fileElem.addEventListener("change", function (e) {
-            handleFiles(this.files);
-        });
-    </script>
 
 {% endblock %}
