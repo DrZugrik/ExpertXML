@@ -37,6 +37,7 @@ urlpatterns = [
     path('delete_file/<int:file_id>/', delete_file, name='delete_file'),
 
 
+
 ]
 
 # Добавляем обработчик для медиа-файлов только в режиме отладки

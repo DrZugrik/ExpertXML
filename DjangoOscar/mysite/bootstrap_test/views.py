@@ -97,6 +97,7 @@ def redact_form(request):
     return render(request, 'redact_form.html', {'form': form})
 
 
+
 def user_uploads(request):
     uploaded_files = UploadedFile.objects.all()
     return render(request, 'profile/user_uploads.html', {'uploaded_files': uploaded_files})

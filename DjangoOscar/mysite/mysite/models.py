@@ -80,7 +80,7 @@ class UserProfile(models.Model):
     first_name = models.CharField("Имя", max_length=30, null=True, blank=True)
     surname = models.CharField("Фамилия", max_length=30, null=True, blank=True)
     last_name = models.CharField("Отчество", max_length=30, null=True, blank=True)
-    photo = models.ImageField("Фото", upload_to='user_photos/', null=True, blank=True)
+    photo = models.ImageField("Фото", upload_to='uploads/uploads_bio/', null=True, blank=True)
     company = models.CharField("Организация", max_length=255, null=True, blank=True)
     date_birth = models.DateField("Дата рождения", null=True, blank=True)
     date_joined = models.DateTimeField("Дата регистрации", default=datetime.date.today)

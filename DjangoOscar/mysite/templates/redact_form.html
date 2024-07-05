@@ -1,114 +1,81 @@
-<!-- redact_form.html -->
 {% extends 'base.html' %}
 {% load static %}
 
 {% block redact %}
 <div id="home" class="intro">
     <div class="card">
-            {% if file %}
-
+        {% if file %}
             <div class="card-header">
                 <ul class="nav nav-tabs card-header-tabs">
-                    <li class="nav-item"><a class="nav-link active" href="#">{{ file.name }}</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">{{ file.name }}</a>
+                    </li>
                 </ul>
             </div>
-            {% else %}
-            <p>No files uploaded....</p>
-            {% endif %}
-            <div class="card-body">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-check">
-                                <input id="formatted-display" class="form-check-input" type="radio" name="display-type" value="formatted">
-                                <label class="form-check-label" for="formatted-display">Форматированное отображение</label>
-                            </div>
-                            <div class="form-check">
-                                <input id="field-display" class="form-check-input" type="radio" name="display-type" value="fields">
-                                <label class="form-check-label" for="field-display">Отображение в виде полей</label>
+        {% else %}
+            <p>No files uploaded yet ...</p>
+        {% endif %}
+        
+        <div class="card-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input id="formatted-display" class="form-check-input" type="radio" name="display-type" value="formatted">
+                            <label class="form-check-label" for="formatted-display">Форматированное отображение</label>
+                        </div>
+                        <div class="form-check">
+                            <input id="field-display" class="form-check-input" type="radio" name="display-type" value="fields">
+                            <label class="form-check-label" for="field-display">Отображение в виде полей</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <!-- Контейнер для PDF Viewer -->
+                        <div id="pdf_doc">
+                            <div id="viewer" class="pdfViewer" style="border: 1px solid #ccc; width: 100%; height: 600px; overflow: auto;">
+                                <canvas id="pdf-render" style="width: 100%;"></canvas>
                             </div>
                         </div>
-                        <div class="col-md-6"></div>
-                        <div class="col">
-                            <div class="row">
-                                <div class="col-md-6" id="fields_doc">
-                                    {{ name }}
-                                </div>
-                                <div class="col-md-6" id="pdf_doc">
-                                    <p>Загруженные файлы:</p>
-                                    <ul id="uploadedFilesList"></ul>
-                                    <div id="pdf-container" style="border: 1px solid #ccc; width: 100%; height: 600px; overflow: auto;">
-                                        <canvas id="pdf-render" style="width: 100%;"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col">
-                            <div class="row">
-                                <div class="col-md-6" id="fields_doc">
-                                    {{ name }}
-                                </div>
-                                <div class="col-md-6" id="pdf_doc">
-                                    <p>Загруженные файлы:</p>
-                                    <ul id="uploadedFilesList"></ul>
-                                    <div id="pdf-container" style="border: 1px solid #ccc; width: 100%; height: 600px; overflow: auto;">
-                                        <canvas id="pdf-render" style="width: 100%;"></canvas>
-                                    </div>
-                                </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <!-- Контейнер для PDF Viewer -->
+                        <div id="pdf_doc">
+                            <div id="viewer" class="pdfViewer" style="border: 1px solid #ccc; width: 100%; height: 600px; overflow: auto;">
+                                <canvas id="pdf-render" style="width: 100%;"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
                 <p>
-                <button class="btn btn-primary" type="button">Сохранить данные</button>
-                <button class="btn btn-primary" type="button" disabled>Заполнить автоматически</button>
-                <button class="btn btn-primary" type="button">Скачать результат</button>
-                
+                    <button class="btn btn-primary" type="submit" form="{{ form.id }}">Сохранить данные</button>
+                    <button class="btn btn-primary" type="button" id="auto-fill-button" disabled>Заполнить автоматически</button>
+                    <button class="btn btn-primary" type="button" id="download-button">Скачать результат</button>
+                </p>
             </div>
         </div>
-  
     </div>
-    <!-- end intro 2 -->
+</div>
+<!-- end intro 2 -->
 
-    <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
-    <script>
-        // Функция для обновления списка загруженных файлов при выборе файлов
-        function updateUploadedFilesList(input) {
-            var fileList = document.getElementById('uploadedFilesList');
-            fileList.innerHTML = ''; // Очищаем список файлов перед обновлением
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.4.456/pdf.min.js"></script>
+<script>
+    // Функция для отображения PDF файла
+    async function renderPDF(url) {
+        const pdfjsLib = window['pdfjs-dist/build/pdf'];
+        const loadingTask = pdfjsLib.getDocument(url);
+        const pdfDoc = await loadingTask.promise;
+        const viewerContainer = document.getElementById('viewer');
+        viewerContainer.innerHTML = ''; // Очистка контейнера перед добавлением страниц
 
-            for (var i = 0; i < input.files.length; i++) {
-                var listItem = document.createElement('li');
-                listItem.textContent = input.files[i].name;
-                fileList.appendChild(listItem);
-                displayPDF(input.files[i]);
-            }
-
-            // Обновляем скрытое поле с именами загруженных файлов
-            document.getElementById('uploadedFiles').value = JSON.stringify(Array.from(input.files).map(file => file.name));
-        }
-
-        // Функция для отображения PDF файла
-        async function displayPDF(file) {
-            const pdfjsLib = window['pdfjs-dist/build/pdf'];
-            const reader = new FileReader();
-
-            reader.onload = function(event) {
-                const pdfData = new Uint8Array(event.target.result);
-                renderPDF(pdfData);
-            };
-
-            reader.readAsArrayBuffer(file);
-        }
-
-        async function renderPDF(pdfData) {
-            const loadingTask = pdfjsLib.getDocument({data: pdfData});
-            const pdf = await loadingTask.promise;
-
-            const page = await pdf.getPage(1);
-            const viewport = page.getViewport({scale: 1.5});
-            const canvas = document.getElementById("pdf-render");
+        for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
+            const page = await pdfDoc.getPage(pageNum);
+            const viewport = page.getViewport({ scale: 1.5 });
+            const canvas = document.createElement('canvas');
             const context = canvas.getContext('2d');
             canvas.height = viewport.height;
             canvas.width = viewport.width;
@@ -118,8 +85,26 @@
                 viewport: viewport
             };
 
-            page.render(renderContext);
+            await page.render(renderContext).promise;
+            viewerContainer.appendChild(canvas);
         }
-    </script>
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const existingFileUrl = "{{ file.file.url }}"; // Используем URL файла из базы данных
+        if (existingFileUrl) {
+            renderPDF(existingFileUrl);
+        }
+    });
+
+    // Скачивание файла
+    document.getElementById('download-button').addEventListener('click', function() {
+        if ("{{ file.file.url }}") {
+            window.open("{{ file.file.url }}", '_blank');
+        } else {
+            alert('Нет доступного файла для скачивания.');
+        }
+    });
+</script>
 
 {% endblock %}
